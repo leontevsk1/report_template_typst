@@ -1,9 +1,11 @@
 #import "lib.typ": *
 
-#show: report.with(
+// Единая точка правки всех повторяющихся реквизитов отчёта — реализация
+// "переменных" в духе \author{}/\title{} из LaTeX через словарь и spread (..meta).
+#let meta = (
   ministry: "Министерство науки и высшего образования",
   country: "Российской Федерации",
-  fulluniversityname: "ФГБОУ ВО Алтайский государственный университет",
+  fulluniversityname: "ФГБОУ ВО «Алтайский государственный университет»",
   institute: "Институт цифровых технологий, электроники и физики",
   department: "Кафедра вычислительной техники и электроники",
   shortdepartment: "ВТиЭ",
@@ -22,32 +24,14 @@
   count-work-tab: "6",
 )
 
-#make-title(
-  ministry: "Министерство науки и высшего образования",
-  country: "Российской Федерации",
-  fulluniversityname: "ФГБОУ ВО Алтайский государственный университет",
-  institute: "Институт цифровых технологий, электроники и физики",
-  department: "Кафедра вычислительной техники и электроники",
-  shortdepartment: "ВТиЭ",
-  worktype: "Отчёт по практике на тему:",
-  title: "Название работы",
-  author: "А. А. Никто",
-  groupnumber: "565",
-  supervisor: "В. В. Электроник",
-  supervisordegree: "к.ф.-м.н., доцент",
-  date: str(datetime.today().year()),
-)
+#show: report.with(..meta)
 
+#make-title(..meta)
+
+#set page(numbering: "1", number-align: top + right, header: auto)
 #counter(page).update(2)
 
-#make-abstract(
-  count-work-page: "22",
-  count-work-img: "6",
-  count-work-lit: "5",
-  count-work-tab: "6",
-  keys-ru: "компьютерное моделирование, система управления версиями",
-  abstract-ru: "Объём текста не менее 500 символов! Пока счётчики выставляются вручную, при необходимости правьте lib.typ.",
-)
+#make-abstract(..meta)
 
 #outline(title: "Содержание", indent: auto)
 

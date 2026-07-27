@@ -16,16 +16,17 @@
 
 // Оформление листингов кода (ГОСТ-стиль: рамка, номера строк, аналог minted/frame=lines).
 #let code-listing(raw-elem) = {
-  set text(font: "DejaVu Sans Mono", size: 9pt)
+  set text(font: "DejaVu Sans Mono", size: 8pt)
+  set par(leading: 0.55em, spacing: 0.55em)
   block(
     width: 100%,
     stroke: 0.5pt,
-    inset: (x: 8pt, y: 6pt),
+    inset: (x: 6pt, y: 5pt),
     breakable: true,
     grid(
-      columns: (1.5em, 1fr),
-      column-gutter: 0.6em,
-      row-gutter: 0.65em,
+      columns: (1.3em, 1fr),
+      column-gutter: 0.5em,
+      row-gutter: 0.4em,
       align: left,
       ..raw-elem.lines.map(line => (
         align(right, text(fill: gray)[#line.number]),
@@ -50,6 +51,7 @@
   supervisor: "",
   supervisordegree: "",
   date: "",
+  ..sink,
 ) = {
   set page(numbering: none)
   set align(center)
@@ -64,7 +66,7 @@
   v(2cm)
   worktype
   v(0.5cm)
-  text(weight: "bold")[#upper(title)]
+  upper(title)
   v(1cm)
 
   v(1fr)
@@ -76,19 +78,10 @@
     [], [
       #set align(left)
       Выполнил студент #groupnumber~группы: \
-      #box(width: 100%, line(length: 100%)) #author \
-      «#box(width: 1cm, line(length: 100%))» #box(width: 3cm, line(length: 100%)) #datetime.today().year() г.
-    ]
-  )
-  v(0.5cm)
-  grid(
-    columns: (1fr, 1fr),
-    column-gutter: 1cm,
-    align: (left, left),
-    [], [
-      #set align(left)
+      #box(width: 2.5cm, line(length: 100%)) #author \
+      «#box(width: 1cm, line(length: 100%))» #box(width: 3cm, line(length: 100%)) #datetime.today().year() г. \
       Проверил: #supervisordegree \
-      #box(width: 100%, line(length: 100%)) #supervisor \
+      #box(width: 2.5cm, line(length: 100%)) #supervisor \
       «#box(width: 1cm, line(length: 100%))» #box(width: 3cm, line(length: 100%)) #datetime.today().year() г.
     ]
   )
@@ -108,6 +101,7 @@
   count-work-tab: "",
   keys-ru: "",
   abstract-ru: "",
+  ..sink,
 ) = {
   align(center)[РЕФЕРАТ]
   v(1em)
@@ -205,7 +199,7 @@
   show heading.where(level: 1): it => {
     pagebreak(weak: true)
     set align(center)
-    set text(size: 14pt, weight: "bold")
+    set text(size: 14pt, weight: "regular")
     v(0pt)
     block(above: 0pt, below: 15pt)[
       #if it.numbering != none [#counter(heading).display() ]
