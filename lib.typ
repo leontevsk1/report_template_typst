@@ -14,6 +14,27 @@
   str(ch) + "." + str(n)
 }
 
+// Оформление листингов кода (ГОСТ-стиль: рамка, номера строк, аналог minted/frame=lines).
+#let code-listing(raw-elem) = {
+  set text(font: "DejaVu Sans Mono", size: 9pt)
+  block(
+    width: 100%,
+    stroke: 0.5pt,
+    inset: (x: 8pt, y: 6pt),
+    breakable: true,
+    grid(
+      columns: (1.5em, 1fr),
+      column-gutter: 0.6em,
+      row-gutter: 0.65em,
+      align: left,
+      ..raw-elem.lines.map(line => (
+        align(right, text(fill: gray)[#line.number]),
+        line.body,
+      )).flatten()
+    ),
+  )
+}
+
 // Титульный лист.
 #let make-title(
   ministry: "",
@@ -210,6 +231,11 @@
   show figure.where(kind: table): set figure.caption(position: top)
   show figure.where(kind: image): set figure.caption(position: bottom)
   show figure.where(kind: "listing"): set figure.caption(position: bottom)
+  show figure.where(kind: "listing"): it => {
+    set block(breakable: true)
+    show raw.where(block: true): code-listing
+    it
+  }
 
   show figure.caption: it => {
     if it.kind == table {

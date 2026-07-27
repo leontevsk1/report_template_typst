@@ -1,6 +1,4 @@
 #import "lib.typ": *
-#import "@preview/codly:1.3.0": *
-#import "@preview/codly-languages:0.1.1": *
 
 #show: report.with(
   ministry: "Министерство науки и высшего образования",
@@ -23,9 +21,6 @@
   count-work-lit: "5",
   count-work-tab: "6",
 )
-
-#show: codly-init.with()
-#codly(languages: codly-languages, zebra-fill: none)
 
 #make-title(
   ministry: "Министерство науки и высшего образования",
