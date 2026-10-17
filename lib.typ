@@ -183,20 +183,18 @@
     spacing: 1.15em,
   )
 
-  set list(indent: 0pt, body-indent: 0.5em, marker: [--])
+  set list(indent: 0pt, body-indent: 0.5em, marker: sym.bullet)
   set enum(indent: 0pt, body-indent: 0.5em, numbering: gost-heading-numbering, full: true)
 
   set heading(numbering: gost-heading-numbering)
 
-  // Сброс нумерации рисунков/таблиц/листингов в начале каждой главы.
+  // Заголовок главы: сброс нумерации рисунков/таблиц/листингов и оформление.
+  // В Typst второй show с тем же селектором перекрывает первый, поэтому сброс
+  // и оформление делаем одним правилом — иначе счётчики не сбрасываются.
   show heading.where(level: 1): it => {
     counter(figure.where(kind: image)).update(0)
     counter(figure.where(kind: table)).update(0)
     counter(figure.where(kind: "listing")).update(0)
-    it
-  }
-
-  show heading.where(level: 1): it => {
     pagebreak(weak: true)
     set align(center)
     set text(size: 14pt, weight: "regular")
@@ -243,6 +241,21 @@
   set figure.caption(separator: [ -- ])
 
   set table(stroke: 0.5pt)
+
+  // Ссылки (@label) показываем только номером, как \ref{} в LaTeX,
+  // без слова-подписи («Раздел», «Рис.» и т. п.).
+  show ref: it => {
+    let el = it.element
+    if el != none and el.numbering != none {
+      if el.func() == heading {
+        context link(el.location(), (el.numbering)(..counter(heading).at(el.location())))
+      } else {
+        context link(el.location(), el.counter.display(el.numbering))
+      }
+    } else {
+      it
+    }
+  }
 
   body
 }

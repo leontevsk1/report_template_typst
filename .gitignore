@@ -1,2 +1,9 @@
-*.cls
+# Артефакты сборки Typst
+main.pdf
 *.pdf
+
+# ОС и редакторы
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

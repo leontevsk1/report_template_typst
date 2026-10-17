@@ -68,14 +68,15 @@
 )
 
 #pagebreak(weak: true)
-#align(right)[ПРИЛОЖЕНИЕ]
 #heading(numbering: none)[ПРИЛОЖЕНИЕ] <appendix1>
 
 #align(center)[Текст программы]
 
+#align(center)[Пример программы вычисления числа $pi$ на языке _C_ с использованием _MPI_ (пример из https://ru.wikipedia.org/wiki/Message\_Passing\_Interface)] <code:pi-example>
+
 #figure(
   kind: "listing",
-  supplement: "Листинг",
+  supplement: none,
+  numbering: none,
   raw(read("src/pi-mpi.c"), lang: "c", block: true),
-  caption: [Пример программы вычисления числа $pi$ на языке _C_ с использованием _MPI_ (пример из https://ru.wikipedia.org/wiki/Message\_Passing\_Interface)],
-) <code:pi-example>
+)
