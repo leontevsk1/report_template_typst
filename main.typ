@@ -28,9 +28,6 @@
 
 #make-title(..meta)
 
-#set page(numbering: "1", number-align: top + right, header: auto)
-#counter(page).update(2)
-
 #make-abstract(..meta)
 
 #outline(title: "Содержание", indent: auto)

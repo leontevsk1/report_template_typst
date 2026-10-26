@@ -3,6 +3,9 @@
 
 #let indent-length = 1.25cm
 
+// Нумерация страниц: титульный лист (страница 1) остаётся без номера.
+#let page-numbering(n, ..rest) = if n == 1 { [] } else { numbering("1", n) }
+
 // Нумерация заголовков вида "1.", "1.1.", "1.1.1."
 #let gost-heading-numbering(..nums) = {
   nums.pos().map(str).join(".") + "."
@@ -53,7 +56,6 @@
   date: "",
   ..sink,
 ) = {
-  set page(numbering: none)
   set align(center)
 
   [#ministry~#country]
@@ -171,9 +173,9 @@
   set page(
     paper: "a4",
     margin: (left: 3cm, right: 1.5cm, top: 2cm, bottom: 2cm),
-    numbering: "1",
+    numbering: page-numbering,
     number-align: top + right,
-    header: none,
+    header: auto,
   )
 
   set par(
