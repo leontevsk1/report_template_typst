@@ -11,6 +11,16 @@
   nums.pos().map(str).join(".") + "."
 }
 
+// Нумерация списков: "1.", "1.1.", "1.1.1" (как \theenumi/ii/iii в altsu-report.cls,
+// у третьего уровня точки в конце нет).
+#let gost-enum-numbering(..nums) = {
+  let n = nums.pos()
+  n.map(str).join(".") + if n.len() < 3 { "." } else { "" }
+}
+
+// Признак заголовка приложения: такой заголовок выравнивается вправо.
+#let appendix-supplement = [Приложение]
+
 // Нумерация рисунков/таблиц/листингов вида "<номер главы>.<номер элемента>"
 #let gost-figure-numbering(n) = {
   let ch = counter(heading).get().first()
@@ -23,7 +33,7 @@
   set par(leading: 0.55em, spacing: 0.55em)
   block(
     width: 100%,
-    stroke: 0.5pt,
+    stroke: (top: 0.5pt, bottom: 0.5pt),
     inset: (x: 6pt, y: 5pt),
     breakable: true,
     grid(
@@ -186,9 +196,27 @@
   )
 
   set list(indent: 0pt, body-indent: 0.5em, marker: sym.bullet)
-  set enum(indent: 0pt, body-indent: 0.5em, numbering: gost-heading-numbering, full: true)
+  set enum(indent: 0pt, body-indent: 0.5em, numbering: gost-enum-numbering, full: true)
+
+  // Как в altsu-report.cls (labelindent=\parindent для 1-го уровня, 0 для
+  // вложенных): метка списка первого уровня сдвинута на абзацный отступ, метка
+  // вложенного списка стоит там же, где текст пункта уровнем выше.
+  let list-depth = state("list-depth", 0)
+  let indent-top-level(it) = context {
+    if list-depth.get() == 0 {
+      list-depth.update(1)
+      pad(left: indent-length, it)
+      list-depth.update(0)
+    } else {
+      it
+    }
+  }
+  show list: indent-top-level
+  show enum: indent-top-level
 
   set heading(numbering: gost-heading-numbering)
+
+  show outline.entry.where(level: 1): it => upper(it)
 
   // Заголовок главы: сброс нумерации рисунков/таблиц/листингов и оформление.
   // В Typst второй show с тем же селектором перекрывает первый, поэтому сброс
@@ -198,7 +226,7 @@
     counter(figure.where(kind: table)).update(0)
     counter(figure.where(kind: "listing")).update(0)
     pagebreak(weak: true)
-    set align(center)
+    set align(if it.supplement == appendix-supplement { right } else { center })
     set text(size: 14pt, weight: "regular")
     v(0pt)
     block(above: 0pt, below: 15pt)[
@@ -229,7 +257,7 @@
   // Подписи: таблица — сверху справа, рисунок/листинг — снизу по центру.
   show figure.where(kind: table): set figure.caption(position: top)
   show figure.where(kind: image): set figure.caption(position: bottom)
-  show figure.where(kind: "listing"): set figure.caption(position: bottom)
+  show figure.where(kind: "listing"): set figure.caption(position: top)
   show figure.where(kind: "listing"): it => {
     set block(breakable: true)
     show raw.where(block: true): code-listing
@@ -237,8 +265,12 @@
   }
 
   show figure.caption: it => {
-    if it.kind == table {
-      align(right)[#it.supplement~#it.counter.display(it.numbering)#it.separator#it.body]
+    set par(justify: false, first-line-indent: 0pt)
+    if it.kind == table or it.kind == "listing" {
+      block(width: 100%, breakable: false)[
+        #align(right)[#it.supplement~#it.counter.display(it.numbering)]
+        #align(center)[#it.body]
+      ]
     } else {
       align(center)[#it.supplement~#it.counter.display(it.numbering)#it.separator#it.body]
     }
@@ -257,7 +289,7 @@
       if el.func() == heading {
         context link(el.location(), (el.numbering)(..counter(heading).at(el.location())))
       } else {
-        context link(el.location(), el.counter.display(el.numbering))
+        context link(el.location(), el.counter.display(el.numbering, at: el.location()))
       }
     } else {
       it

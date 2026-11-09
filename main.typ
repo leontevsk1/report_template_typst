@@ -65,7 +65,7 @@
 )
 
 #pagebreak(weak: true)
-#heading(numbering: none)[ПРИЛОЖЕНИЕ] <appendix1>
+#heading(numbering: none, supplement: appendix-supplement)[ПРИЛОЖЕНИЕ] <appendix1>
 
 #align(center)[Текст программы]
 
