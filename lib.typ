@@ -3,6 +3,10 @@
 
 #let indent-length = 1.25cm
 
+// Межстрочный интервал: шаг строк 24,05 пт (полуторный для Times New Roman 14 пт),
+// как в эталоне; такой же зазор между абзацами, списками и строками реферата.
+#let line-gap = 14.35pt
+
 // Нумерация страниц: титульный лист (страница 1) остаётся без номера.
 #let page-numbering(n, ..rest) = if n == 1 { [] } else { numbering("1", n) }
 
@@ -11,15 +15,18 @@
   nums.pos().map(str).join(".") + "."
 }
 
-// Нумерация списков: "1.", "1.1.", "1.1.1" (как \theenumi/ii/iii в altsu-report.cls,
-// у третьего уровня точки в конце нет).
-#let gost-enum-numbering(..nums) = {
-  let n = nums.pos()
-  n.map(str).join(".") + if n.len() < 3 { "." } else { "" }
-}
+// Нумерация списков по методичке ИВТ п. 2.2.4: "1)", вложенные — "1.1)", "1.1.1)".
+#let gost-enum-numbering(..nums) = nums.pos().map(str).join(".") + ")"
+
+// Расшифровка обозначений под формулой: начинается со слова «где», без красной строки
+// (методичка ИВТ п. 2.5.2).
+#let legend(body) = par(first-line-indent: 0pt, body)
 
 // Признак заголовка приложения: такой заголовок выравнивается вправо.
 #let appendix-supplement = [Приложение]
+
+// Нумерация формул вида "(1.1)" в пределах главы (методичка ИВТ п. 2.2.9).
+#let gost-eq-numbering(n) = "(" + str(counter(heading).get().first()) + "." + str(n) + ")"
 
 // Нумерация рисунков/таблиц/листингов вида "<номер главы>.<номер элемента>"
 #let gost-figure-numbering(n) = {
@@ -80,23 +87,21 @@
   v(0.5cm)
   upper(title)
   v(1cm)
+  v(29.1pt)
 
-  v(1fr)
-
-  grid(
-    columns: (1fr, 1fr),
-    column-gutter: 1cm,
-    align: (left, left),
-    [], [
-      #set align(left)
-      Выполнил студент #groupnumber~группы: \
-      #box(width: 2.5cm, line(length: 100%)) #author \
-      «#box(width: 1cm, line(length: 100%))» #box(width: 3cm, line(length: 100%)) #datetime.today().year() г. \
-      Проверил: #supervisordegree \
-      #box(width: 2.5cm, line(length: 100%)) #supervisor \
-      «#box(width: 1cm, line(length: 100%))» #box(width: 3cm, line(length: 100%)) #datetime.today().year() г.
-    ]
-  )
+  let blank(w) = box(width: w, line(length: 100%))
+  let signer(role, name) = block(width: 45%, above: 0pt, below: 0pt, breakable: false)[
+    #set align(left)
+    #set par(first-line-indent: 0pt)
+    #role \
+    #blank(2.3cm) #name \
+    «#blank(0.7cm)» #blank(2cm) #datetime.today().year()~г.
+  ]
+  align(right)[
+    #signer([Выполнил студент #groupnumber~группы:], author)
+    #v(16.1pt)
+    #signer([Проверил: #supervisordegree], supervisor)
+  ]
 
   v(1fr)
 
@@ -116,28 +121,16 @@
   ..sink,
 ) = {
   align(center)[РЕФЕРАТ]
-  v(1em)
+  v(1.15em)
 
-  grid(
-    columns: (1fr, auto),
-    [Объем работы листов], [#count-work-page],
-  )
-  v(0.5em)
-  grid(
-    columns: (1fr, auto),
-    [Количество рисунков], [#count-work-img],
-  )
-  v(0.5em)
-  grid(
-    columns: (1fr, auto),
-    [Количество используемых источников], [#count-work-lit],
-  )
-  v(0.5em)
-  grid(
-    columns: (1fr, auto),
-    [Количество таблиц], [#count-work-tab],
-  )
-  v(1em)
+  let row(label, value) = {
+    [#label #h(1fr) #value]
+    parbreak()
+  }
+  row([Объем работы листов], count-work-page)
+  row([Количество рисунков], count-work-img)
+  row([Количество используемых источников], count-work-lit)
+  row([Количество таблиц], count-work-tab)
 
   upper(keys-ru) + [.]
   parbreak()
@@ -185,22 +178,24 @@
     margin: (left: 3cm, right: 1.5cm, top: 2cm, bottom: 2cm),
     numbering: page-numbering,
     number-align: top + right,
+    header-ascent: 30.2pt,
     header: auto,
   )
 
   set par(
     justify: true,
-    leading: 1.15em,
+    leading: line-gap,
     first-line-indent: (amount: indent-length, all: true),
-    spacing: 1.15em,
+    spacing: line-gap,
   )
 
-  set list(indent: 0pt, body-indent: 0.5em, marker: sym.bullet)
+  set list(indent: 0pt, body-indent: 0.5em, marker: [-])
   set enum(indent: 0pt, body-indent: 0.5em, numbering: gost-enum-numbering, full: true)
 
-  // Как в altsu-report.cls (labelindent=\parindent для 1-го уровня, 0 для
-  // вложенных): метка списка первого уровня сдвинута на абзацный отступ, метка
-  // вложенного списка стоит там же, где текст пункта уровнем выше.
+  // Как в altsu-report.cls (labelindent=\parindent у 1-го уровня, 0 у вложенных):
+  // номер или маркер списка первого уровня начинается на абзацном отступе.
+  // Вложенный список лежит в теле пункта, поэтому его метка стоит там же,
+  // где текст пункта уровнем выше.
   let list-depth = state("list-depth", 0)
   let indent-top-level(it) = context {
     if list-depth.get() == 0 {
@@ -218,6 +213,9 @@
 
   show outline.entry.where(level: 1): it => upper(it)
 
+  // Методичка ИВТ п. 2.1.9: переносы в заголовках не допускаются.
+  show heading: set text(hyphenate: false)
+
   // Заголовок главы: сброс нумерации рисунков/таблиц/листингов и оформление.
   // В Typst второй show с тем же селектором перекрывает первый, поэтому сброс
   // и оформление делаем одним правилом — иначе счётчики не сбрасываются.
@@ -225,32 +223,30 @@
     counter(figure.where(kind: image)).update(0)
     counter(figure.where(kind: table)).update(0)
     counter(figure.where(kind: "listing")).update(0)
+    counter(math.equation).update(0)
     pagebreak(weak: true)
     set align(if it.supplement == appendix-supplement { right } else { center })
     set text(size: 14pt, weight: "regular")
-    v(0pt)
-    block(above: 0pt, below: 15pt)[
+    v(line-gap)
+    // Методичка ИВТ п. 2.1.11: 12-15 пт между заголовком и текстом (в эталоне 15 пт
+    // «после» поверх межстрочного интервала; в Typst block(below) его заменяет).
+    block(above: 0pt, below: 28.1pt)[
       #if it.numbering != none [#counter(heading).display() ]
       #upper(it.body)
     ]
-    // Методичка ИВТ п. 2.1.11: расстояние между заголовком и текстом 12-15 пт.
-    // В Word это «интервал после заголовка», он суммируется с межстрочным;
-    // в Typst block(below) заменяет межстрочный интервал, поэтому добавляем
-    // те же 15 пт через v(), иначе зазор выглядит как обычная строка.
-    v(15pt)
   }
 
   show heading.where(level: 2): it => {
     set text(size: 14pt, weight: "regular")
-    block(above: 1.5em, below: 1.5em, width: 100%)[
-      #h(indent-length)#if it.numbering != none [#counter(heading).display() ]#it.body
+    block(above: 29.1pt, below: 24.3pt, width: 100%)[
+      #h(indent-length)#if it.numbering != none [#counter(heading).display()#h(14pt)]#it.body
     ]
   }
 
   show heading.where(level: 3): it => {
     set text(size: 14pt, weight: "regular")
-    block(above: 1.2em, below: 1.2em, width: 100%)[
-      #h(indent-length)#if it.numbering != none [#counter(heading).display() ]#it.body
+    block(above: 22.3pt, below: 22.3pt, width: 100%)[
+      #h(indent-length)#if it.numbering != none [#counter(heading).display()#h(14pt)]#it.body
     ]
   }
 
@@ -277,9 +273,21 @@
   }
 
   set figure(numbering: gost-figure-numbering)
-  set figure.caption(separator: [ -- ])
+  set figure.caption(separator: [. ])
 
-  set table(stroke: 0.5pt)
+  set math.equation(numbering: gost-eq-numbering)
+
+  // Методичка ИВТ п. 2.4.3: высота строки таблицы не менее 8 мм.
+  set table(stroke: 0.5pt, inset: (x: 5pt, y: 6.5pt))
+
+  // Методичка ИВТ п. 1.7.1: каждая запись списка литературы начинается с красной строки.
+  // Записи строятся как block без абзаца, поэтому оборачиваем тело в par.
+  show bibliography: it => {
+    show block: b => if b.body.func() == par { b } else {
+      block(width: 100%, par(first-line-indent: (amount: indent-length, all: true), hanging-indent: 0pt, b.body))
+    }
+    it
+  }
 
   // Ссылки (@label) показываем только номером, как \ref{} в LaTeX,
   // без слова-подписи («Раздел», «Рис.» и т. п.).

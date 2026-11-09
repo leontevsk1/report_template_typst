@@ -30,7 +30,7 @@
 
 #make-abstract(..meta)
 
-#outline(title: "Содержание", indent: auto)
+#outline(title: "Содержание", indent: 0pt)
 
 #pagebreak(weak: true)
 #heading(numbering: none)[ВВЕДЕНИЕ]
@@ -40,9 +40,9 @@
 *Цель*
 
 *Задачи:*
-+ Текст много текста.
-+ Текст много текста.
-+ Текст много текста.
++ текст много текста.
++ текст много текста.
++ текст много текста.
 
 #include "chapter-1.typ"
 #include "chapter-2.typ"
@@ -50,10 +50,10 @@
 
 #heading(numbering: none)[ЗАКЛЮЧЕНИЕ]
 
-+ Пример ссылки на электронный источник @wikiRUBitbucket @wikiRUIdSoftware @wikiRUGitHub.
-+ Пример ссылки на книгу одного автора @book1author.
-+ Пример ссылки на несколько источников @book1author @wikiRUBitbucket.
-+ Пример ссылки на книгу 5-ти и более авторов @book5author.
++ пример ссылки на электронный источник @wikiRUBitbucket @wikiRUIdSoftware @wikiRUGitHub.
++ пример ссылки на книгу одного автора @book1author.
++ пример ссылки на несколько источников @book1author @wikiRUBitbucket.
++ пример ссылки на книгу 5-ти и более авторов @book5author.
 
 #pagebreak(weak: true)
 #heading(numbering: none)[СПИСОК ИСПОЛЬЗОВАННОЙ ЛИТЕРАТУРЫ]
