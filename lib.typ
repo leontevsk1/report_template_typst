@@ -228,9 +228,8 @@
     set align(if it.supplement == appendix-supplement { right } else { center })
     set text(size: 14pt, weight: "regular")
     v(line-gap)
-    // Методичка ИВТ п. 2.1.11: 12-15 пт между заголовком и текстом (в эталоне 15 пт
-    // «после» поверх межстрочного интервала; в Typst block(below) его заменяет).
-    block(above: 0pt, below: 28.1pt)[
+    // Методичка ИВТ п. 2.1.11: 12-15 пт между заголовком и текстом.
+    block(above: 0pt, below: 15pt)[
       #if it.numbering != none [#counter(heading).display() ]
       #upper(it.body)
     ]
@@ -238,7 +237,7 @@
 
   show heading.where(level: 2): it => {
     set text(size: 14pt, weight: "regular")
-    block(above: 29.1pt, below: 24.3pt, width: 100%)[
+    block(above: 15pt, below: 15pt, width: 100%)[
       #h(indent-length)#if it.numbering != none [#counter(heading).display()#h(14pt)]#it.body
     ]
   }
