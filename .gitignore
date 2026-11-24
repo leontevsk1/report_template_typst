@@ -1,6 +1,6 @@
 # Артефакты сборки Typst
-main.pdf
 *.pdf
+/build/
 
 # ОС и редакторы
 .DS_Store

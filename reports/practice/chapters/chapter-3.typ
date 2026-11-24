@@ -1,11 +1,11 @@
 = Глава 3 <ch:ch03>
 
 Пример ссылок:
-+ на главу @ch:ch01;
-+ на раздел @sec:ch01-sec01 главы @ch:ch01;
-+ на раздел @sec:ch02-sec01 главы @ch:ch02;
-+ на приложение на странице #context counter(page).at(<appendix1>).first();
-+ на код на странице #context counter(page).at(<code:pi-example>).first().
++ На главу @ch:ch01.
++ На раздел @sec:ch01-sec01 главы @ch:ch01.
++ На раздел @sec:ch02-sec01 главы @ch:ch02.
++ На приложение на странице #context counter(page).at(<appendix1>).first().
++ На код на странице #context counter(page).at(<code:pi-example>).first().
 
 == Раздел 1 <sec:ch03-sec01>
 
@@ -21,13 +21,13 @@
 
 Пример ссылки на рисунок в документе @fig:example05.
 #figure(
-  image("images/fibonacci.png", width: 50%),
+  image("../images/fibonacci.png", width: 50%),
   caption: [Пример рисунка в формате PNG.],
 ) <fig:example05>
 
 Пример ссылки на рисунок в документе @fig:example06.
 #figure(
-  image("images/fibonacci.svg", width: 50%),
+  image("../images/fibonacci.svg", width: 50%),
   caption: [Пример рисунка в формате SVG.],
 ) <fig:example06>
 

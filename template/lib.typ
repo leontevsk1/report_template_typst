@@ -3,9 +3,8 @@
 
 #let indent-length = 1.25cm
 
-// Межстрочный интервал: шаг строк 24,05 пт (полуторный для Times New Roman 14 пт),
-// как в эталоне; такой же зазор между абзацами, списками и строками реферата.
-#let line-gap = 14.35pt
+// Зазор между строками (par.leading); такой же между абзацами и пунктами списков.
+#let line-gap = 10pt
 
 // Нумерация страниц: титульный лист (страница 1) остаётся без номера.
 #let page-numbering(n, ..rest) = if n == 1 { [] } else { numbering("1", n) }
@@ -15,8 +14,8 @@
   nums.pos().map(str).join(".") + "."
 }
 
-// Нумерация списков по методичке ИВТ п. 2.2.4: "1)", вложенные — "1.1)", "1.1.1)".
-#let gost-enum-numbering(..nums) = nums.pos().map(str).join(".") + ")"
+// Нумерация списков с точкой: "1.", вложенные — "1.1.", "1.1.1.".
+#let gost-enum-numbering(..nums) = nums.pos().map(str).join(".") + "."
 
 // Расшифровка обозначений под формулой: начинается со слова «где», без красной строки
 // (методичка ИВТ п. 2.5.2).
@@ -227,7 +226,7 @@
     pagebreak(weak: true)
     set align(if it.supplement == appendix-supplement { right } else { center })
     set text(size: 14pt, weight: "regular")
-    v(line-gap)
+    // Заголовок начинается у верхнего поля (2 см), без дополнительного отступа.
     // Методичка ИВТ п. 2.1.11: 12-15 пт между заголовком и текстом.
     block(above: 0pt, below: 15pt)[
       #if it.numbering != none [#counter(heading).display() ]

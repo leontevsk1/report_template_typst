@@ -1,0 +1,71 @@
+#import "../../template/lib.typ": *
+
+// Единая точка правки всех повторяющихся реквизитов отчёта — реализация
+// "переменных" в духе \author{}/\title{} из LaTeX через словарь и spread (..meta).
+#let meta = (
+  ministry: "Министерство науки и высшего образования",
+  country: "Российской Федерации",
+  fulluniversityname: "ФГБОУ ВО «Алтайский государственный университет»",
+  institute: "Институт цифровых технологий, электроники и физики",
+  department: "Кафедра вычислительной техники и электроники",
+  shortdepartment: "ВТиЭ",
+  worktype: "Отчёт по лабораторной работе на тему:",
+  title: "Название работы",
+  author: "А. А. Никто",
+  groupnumber: "565",
+  supervisor: "В. В. Электроник",
+  supervisordegree: "к.ф.-м.н., доцент",
+  date: str(datetime.today().year()),
+)
+
+#show: report.with(..meta)
+
+#make-title(..meta)
+
+#outline(title: "Содержание", indent: 0pt)
+
+#pagebreak(weak: true)
+#heading(numbering: none)[ВВЕДЕНИЕ]
+
+*Актуальность*
+
+*Цель*
+
+*Задачи:*
++ Текст много текста.
++ Текст много текста.
++ Текст много текста.
+
+#include "chapters/chapter-1.typ"
+#include "chapters/chapter-2.typ"
+#include "chapters/chapter-3.typ"
+
+#heading(numbering: none)[ЗАКЛЮЧЕНИЕ]
+
++ Пример ссылки на электронный источник @wikiRUBitbucket @wikiRUIdSoftware @wikiRUGitHub.
++ Пример ссылки на книгу одного автора @book1author.
++ Пример ссылки на несколько источников @book1author @wikiRUBitbucket.
++ Пример ссылки на книгу 5-ти и более авторов @book5author.
+
+#pagebreak(weak: true)
+#heading(numbering: none)[СПИСОК ИСПОЛЬЗОВАННОЙ ЛИТЕРАТУРЫ]
+#bibliography(
+  "references.yml",
+  style: "../../template/gost-r-7-0-5-2008-numeric.csl",
+  title: none,
+  full: true,
+)
+
+#pagebreak(weak: true)
+#heading(numbering: none, supplement: appendix-supplement)[ПРИЛОЖЕНИЕ] <appendix1>
+
+#align(center)[Текст программы]
+
+#align(center)[Пример программы вычисления числа $pi$ на языке _C_ с использованием _MPI_ (пример из https://ru.wikipedia.org/wiki/Message\_Passing\_Interface)] <code:pi-example>
+
+#figure(
+  kind: "listing",
+  supplement: none,
+  numbering: none,
+  raw(read("src/pi-mpi.c"), lang: "c", block: true),
+)

@@ -1,30 +1,37 @@
-= Глава 2 <ch:ch02>
+= Глава 3 <ch:ch03>
 
-== Раздел 1 <sec:ch02-sec01>
+Пример ссылок:
++ На главу @ch:ch01.
++ На раздел @sec:ch01-sec01 главы @ch:ch01.
++ На раздел @sec:ch02-sec01 главы @ch:ch02.
++ На приложение на странице #context counter(page).at(<appendix1>).first().
++ На код на странице #context counter(page).at(<code:pi-example>).first().
 
-=== Подраздел 1 <subsec:ch02-sec01-sub01>
+== Раздел 1 <sec:ch03-sec01>
 
-Пример ссылки на рисунок в документе @fig:example03.
+=== Подраздел 1 <subsec:ch03-sec01-sub01>
+
+=== Подраздел 2 <subsec:ch03-sec01-sub02>
+
+== Раздел 2 <sec:ch03-sec02>
+
+=== Подраздел 1 <subsec:ch03-sec02-sub01>
+
+=== Подраздел 2 <subsec:ch03-sec02-sub02>
+
+Пример ссылки на рисунок в документе @fig:example05.
 #figure(
-  image("images/fibonacci.png", width: 50%),
+  image("../images/fibonacci.png", width: 50%),
   caption: [Пример рисунка в формате PNG.],
-) <fig:example03>
+) <fig:example05>
 
-Пример ссылки на рисунок в документе @fig:example04.
+Пример ссылки на рисунок в документе @fig:example06.
 #figure(
-  image("images/fibonacci.svg", width: 50%),
+  image("../images/fibonacci.svg", width: 50%),
   caption: [Пример рисунка в формате SVG.],
-) <fig:example04>
+) <fig:example06>
 
-=== Подраздел 2 <subsec:ch02-sec01-sub02>
-
-== Раздел 2 <sec:ch02-sec02>
-
-=== Подраздел 1 <subsec:ch02-sec02-sub01>
-
-=== Подраздел 2 <subsec:ch02-sec02-sub02>
-
-Пример ссылки на таблицу в документе @tab:example03.
+Пример ссылки на таблицу в документе @tab:example05.
 #figure(
   kind: table,
   supplement: "Таблица",
@@ -36,9 +43,9 @@
     [Графический API], [1], [2], [3],
   ),
   caption: [Системные требования],
-) <tab:example03>
+) <tab:example05>
 
-Пример ссылки на таблицу в документе @tab:example04.
+Пример ссылки на таблицу в документе @tab:example06.
 #figure(
   kind: table,
   supplement: "Таблица",
@@ -50,9 +57,9 @@
     [Графический API], [1], [2], [3],
   ),
   caption: [Системные требования],
-) <tab:example04>
+) <tab:example06>
 
-Пример оформления кода и ссылка на этот код @code:example03.
+Пример оформления кода и ссылка на этот код @code:example05.
 #figure(
   kind: "listing",
   supplement: "Листинг",
@@ -79,9 +86,9 @@
   }
   ```,
   caption: [Вычисление последовательности Фибоначчи],
-) <code:example03>
+) <code:example05>
 
-Пример оформления кода и ссылка на этот код @code:example04.
+Пример оформления кода и ссылка на этот код @code:example06.
 #figure(
   kind: "listing",
   supplement: "Листинг",
@@ -108,4 +115,4 @@
   }
   ```,
   caption: [Сложение двух массивов параллельно десятью потоками (пример из https://ru.wikipedia.org/wiki/OpenMP)],
-) <code:example04>
+) <code:example06>
